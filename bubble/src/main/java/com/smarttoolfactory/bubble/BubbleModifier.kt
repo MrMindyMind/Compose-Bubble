@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
@@ -21,6 +22,7 @@ import kotlin.math.roundToInt
 fun Modifier.bubble(
     bubbleState: BubbleState,
     color: Color = Color.Transparent,
+    brush: Brush? = null,
     shadow: BubbleShadow? = null,
     borderStroke: BorderStroke? = null
 ) = composed(
@@ -65,7 +67,13 @@ fun Modifier.bubble(
                 }
             )
             .clip(shape)
-            .background(color, shape)
+            .let {
+                if (brush != null) {
+                    it.background(brush, shape)
+                } else {
+                    it.background(color, shape)       
+                }
+            }
             .layout { measurable, constraints ->
                 measureBubbleResult(
                     bubbleState, measurable, constraints
